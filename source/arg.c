@@ -41,7 +41,7 @@ enum CMD_ID parse(int argc, char* argv[], void** out_cmd_data) {
 
          bool result = parse_CMD_split(argc,argv,out_cmd_data);
         if (!result) {
-            printf("fail to parse --help");
+            printf("fail to parse --split");
         }
         else
         cmd_id = split;
@@ -50,7 +50,7 @@ enum CMD_ID parse(int argc, char* argv[], void** out_cmd_data) {
 
         bool result = parse_CMD_join(argc,argv,out_cmd_data);
         if (!result) {
-            printf("fail to parse --help");
+            printf("fail to parse --join");
         }
         else
             cmd_id = join;
@@ -150,7 +150,7 @@ bool parse_CMD_split(int argc, char* argv[], void** out_cmd_data) {
         }
         else if (current_arg_type == 2 && current_option == 'o') {
 
-            construct_path(&cmd_data.output_path,argv[2],strlen(argv[2]));
+            construct_path(&cmd_data.output_path,argv[idx],strlen(argv[idx]));
         }
 
     }
@@ -162,9 +162,31 @@ bool parse_CMD_split(int argc, char* argv[], void** out_cmd_data) {
 
 bool parse_CMD_join(int argc, char* argv[], void** out_cmd_data) {
 
-    (void)argc;
-    (void)argv;
-    (void)out_cmd_data;
+    //fsplit --join <path>
+    if (argc == 3) {
+
+        CMD_join cmd_data = {.id = join };
+        construct_path(&cmd_data.input_path,argv[2],strlen(argv[2]));
+        copy_CMD(*out_cmd_data,&cmd_data,join);
+
+        return true;
+    }
+
+    //fsplit --help <cmd>
+    if (argc == 5) {
+
+        CMD_join cmd_data = {.id = join};
+        construct_path(&cmd_data.input_path,argv[2],strlen(argv[2]));
+        
+        if (strcmp(argv[3],"-o") != 0)
+            return false;
+
+        construct_path(&cmd_data.output_path,argv[4],strlen(argv[4]));
+
+        copy_CMD(*out_cmd_data,&cmd_data,join);
+        return true;
+    }
+
     return false;
 }
 
@@ -176,6 +198,7 @@ bool check_argument_length(int argc, char* argv[]) {
             return false;
         }
     }
+
     return true;
 }
 

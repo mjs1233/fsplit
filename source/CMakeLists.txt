@@ -3,4 +3,5 @@ target_sources(fsplit PRIVATE
         arg.c
         cmd.c
         path.c
+        split.c
 )

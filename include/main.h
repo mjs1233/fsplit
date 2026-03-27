@@ -9,5 +9,6 @@
 #include "arg.h"
 #include "path.h"
 #include "cmd.h"
+#include "split.h"
 
 #endif //FILESPLITER_MAIN_H
