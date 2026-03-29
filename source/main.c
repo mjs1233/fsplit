@@ -3,6 +3,7 @@
 
 int main(int argc, char* argv[]) {
 
+    printf("____");
     void* cmd_buffer = NULL;
     alloc_CMD(&cmd_buffer);
     enum CMD_ID id = parse(argc,argv,&cmd_buffer);
